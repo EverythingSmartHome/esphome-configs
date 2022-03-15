@@ -1,0 +1,57 @@
+esphome:
+  name: gosund-lamp
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "YOUR-PASSWORD"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Gosund-Lamp Fallback Hotspot"
+    password: "YOUR-PASSWORD"
+
+captive_portal:
+
+substitutions:
+  devname: gosund_lamp
+
+output:
+  - id: "${devname}_output_wled"
+    platform: esp8266_pwm
+    pin: GPIO13
+    frequency: 1000 Hz
+
+  - id: "${devname}_output_gled"
+    platform: esp8266_pwm
+    pin: GPIO12
+    frequency: 1000 Hz
+
+  - id: "${devname}_output_bled"
+    platform: esp8266_pwm
+    pin: GPIO5
+    frequency: 1000 Hz
+
+  - id: "${devname}_output_rled"
+    platform: esp8266_pwm
+    pin: GPIO15
+    frequency: 1000 Hz
+
+light:
+  - platform: rgbw
+    name: "Gosund Lamp"
+    red: ${devname}_output_rled
+    green: ${devname}_output_gled
+    blue: ${devname}_output_bled
+    white: ${devname}_output_wled
